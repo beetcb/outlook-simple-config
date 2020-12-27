@@ -9,8 +9,6 @@ const headers = {
   'content-type': 'application/x-www-form-urlencoded',
 }
 
-let accountType
-
 const timestamp = () => (Date.now() / 1000) | 0
 async function storeToken(res) {
   const { expires_in, access_token, refresh_token } = await res.json()
@@ -72,11 +70,13 @@ async function init() {
     {
       type: 'input',
       name: 'code',
-      message: `登录地址:${authUrl}/common/oauth2/v2.0/authorize?${new URLSearchParams({
-        client_id,
-        scope: 'Mail.Send offline_access Mail.ReadWrite',
-        response_type: 'code',
-      }).toString()}&redirect_uri=${redirect_uri}\n请输入浏览器返回的地址:`,
+      message: `登录地址:${authUrl}/common/oauth2/v2.0/authorize?${new URLSearchParams(
+        {
+          client_id,
+          scope: 'Mail.Send offline_access Mail.ReadWrite',
+          response_type: 'code',
+        }
+      ).toString()}&redirect_uri=${redirect_uri}\n请输入浏览器返回的地址:`,
     },
   ]
 
@@ -150,6 +150,7 @@ async function checkExpired(token) {
 }
 
 ;(async () => {
+  if (process.argv[2] === '-e') conf.set('email', process.argv[3])
   const token = conf.get('token')
   if (!token) {
     const credentials = await init()

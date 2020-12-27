@@ -1,46 +1,46 @@
-const fetch = require("node-fetch");
-const log = require("./colorLog");
-const conf = require("./auth");
+const fetch = require('node-fetch')
+const log = require('./colorLog')
+const conf = require('./auth')
 
-const { graphApi } = conf.get("credentials");
-const { access_token } = conf.get("token");
+const { graphApi } = conf.get('credentials')
+const { access_token } = conf.get('token')
 
 const headers = {
-  "content-type": "application/json",
+  'content-type': 'application/json',
   authorization: `Bearer ${access_token}`,
-};
+}
 
 async function sendMail(title, content) {
   const message = {
     subject: `${title}`,
-    importance: "Low",
+    importance: 'Low',
     body: {
-      contentType: "HTML",
+      contentType: 'HTML',
       content: `${content}`,
     },
     toRecipients: [
       {
         emailAddress: {
-          address: conf.get("email"),
+          address: conf.get('email'),
         },
       },
     ],
-  };
+  }
 
   const res = await fetch(`${graphApi}/v1.0/me/messages`, {
     headers,
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(message),
-  });
+  })
 
-  headers["content-length"] = 0;
-  const { id } = await res.json();
+  headers['content-length'] = 0
+  const { id } = await res.json()
   const { status } = await fetch(`${graphApi}/v1.0/me/messages/${id}/send`, {
     headers,
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({}),
-  });
-  if (status === 202) log.success("邮件发送成功");
+  })
+  if (status === 202) log.success('邮件发送成功')
 }
 
-module.exports = sendMail;
+module.exports = sendMail
