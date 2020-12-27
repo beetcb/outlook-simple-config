@@ -145,7 +145,10 @@ async function updateToken({ refresh_token }) {
 async function checkExpired(token) {
   const { expires_at } = token
   if (timestamp() > expires_at) {
-    await updateToken()
+    await updateToken(token)
+    log.warning('Updated stored token')
+  } else {
+    log.warning('Using stored token')
   }
 }
 
@@ -157,7 +160,6 @@ async function checkExpired(token) {
     await acquireToken(credentials)
   } else {
     await checkExpired(token)
-    log.warning('Using stored token')
   }
 })()
 
