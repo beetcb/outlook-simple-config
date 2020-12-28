@@ -1,16 +1,18 @@
 const fetch = require('node-fetch')
 const log = require('./colorLog')
-const conf = require('./auth')
-
-const { graphApi } = conf.get('credentials')
-const { access_token } = conf.get('token')
-
-const headers = {
-  'content-type': 'application/json',
-  authorization: `Bearer ${access_token}`,
-}
+let conf = require('./auth')
 
 async function sendMail(title, content) {
+  // synchronized process to get checked conf
+  conf = await conf()
+  const { graphApi } = conf.get('credentials')
+  const { access_token } = conf.get('token')
+
+  const headers = {
+    'content-type': 'application/json',
+    authorization: `Bearer ${access_token}`,
+  }
+
   const message = {
     subject: `${title}`,
     importance: 'Low',
@@ -44,3 +46,5 @@ async function sendMail(title, content) {
 }
 
 module.exports = sendMail
+
+sendMail('a')

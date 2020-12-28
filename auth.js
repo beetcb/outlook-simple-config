@@ -10,6 +10,7 @@ const headers = {
 }
 
 const timestamp = () => (Date.now() / 1000) | 0
+
 async function storeToken(res) {
   const { expires_in, access_token, refresh_token } = await res.json()
   const expires_at = timestamp() + expires_in
@@ -122,8 +123,6 @@ async function updateToken({ refresh_token }) {
   try {
     const res = await fetch(authEndpoint, {
       method: 'POST',
-      //   body: `client_id=${client_id}&redirect_uri=${redirect_uri}&client_secret=${config.client_secret}
-      //         &refresh_token=${refresh_token}&grant_type=refresh_token`,
       body: `${new URLSearchParams({
         grant_type: 'refresh_token',
         client_id,
@@ -152,7 +151,7 @@ async function checkExpired(token) {
   }
 }
 
-;(async () => {
+module.exports = async () => {
   if (process.argv[2] === '-e') conf.set('email', process.argv[3])
   const token = conf.get('token')
   if (!token) {
@@ -161,6 +160,5 @@ async function checkExpired(token) {
   } else {
     await checkExpired(token)
   }
-})()
-
-module.exports = conf
+  return conf
+}
