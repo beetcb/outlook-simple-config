@@ -46,5 +46,3 @@ async function sendMail(title, content) {
 }
 
 module.exports = sendMail
-
-sendMail('a')
