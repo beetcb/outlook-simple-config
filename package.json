@@ -5,7 +5,7 @@
   "main": "auth.js",
   "dependencies": {
     "chalk": "^4.1.0",
-    "conf": "^7.1.2",
+    "conf": "^9.0.0",
     "inquirer": "^7.3.3",
     "node-fetch": "^2.6.1"
   },
