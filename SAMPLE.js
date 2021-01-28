@@ -13,6 +13,5 @@ const sendMail = require(relative('/home/beet/bin', MAILDIR))
     encoding: 'utf-8',
   })
   const message = sign.stdout || sign.error
-  console.log(sign)
   // sendMail('☘️ Sign in result ☘️', message.replace(/\n/g, '<br>'))
 })()
